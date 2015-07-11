@@ -3,10 +3,6 @@
 " Maintainer:	Eli Parra <eli@elzr.com> https://github.com/elzr/vim-json
 " Last Change:	2014-12-20 Load ftplugin/json.vim
 
-" Reload the definition of g:vim_json_syntax_conceal
-" see https://github.com/elzr/vim-json/issues/42
-runtime! ftplugin/json.vim
-
 if !exists("main_syntax")
   if version < 600
     syntax clear
@@ -18,16 +14,10 @@ endif
 
 syntax match   jsonNoise           /\%(:\|,\)/
 
-" NOTE that for the concealing to work your conceallevel should be set to 2
-
 " Syntax: Strings
 " Separated into a match and region because a region by itself is always greedy
 syn match  jsonStringMatch /"\([^"]\|\\\"\)\+"\ze[[:blank:]\r\n]*[,}\]]/ contains=jsonString
-if has('conceal') && g:vim_json_syntax_conceal == 1
-	syn region  jsonString oneline matchgroup=jsonQuote start=/"/  skip=/\\\\\|\\"/  end=/"/ concealends contains=jsonEscape contained
-else
-	syn region  jsonString oneline matchgroup=jsonQuote start=/"/  skip=/\\\\\|\\"/  end=/"/ contains=jsonEscape contained
-endif
+syn region  jsonString oneline matchgroup=jsonQuote start=/"/  skip=/\\\\\|\\"/  end=/"/ contains=jsonEscape contained
 
 " Syntax: JSON does not allow strings with single quotes, unlike JavaScript.
 syn region  jsonStringSQError oneline  start=+'+  skip=+\\\\\|\\"+  end=+'+
@@ -35,11 +25,7 @@ syn region  jsonStringSQError oneline  start=+'+  skip=+\\\\\|\\"+  end=+'+
 " Syntax: JSON Keywords
 " Separated into a match and region because a region by itself is always greedy
 syn match  jsonKeywordMatch /"\([^"]\|\\\"\)\+"[[:blank:]\r\n]*\:/ contains=jsonKeyword
-if has('conceal') && g:vim_json_syntax_conceal == 1
-   syn region  jsonKeyword matchgroup=jsonQuote start=/"/  end=/"\ze[[:blank:]\r\n]*\:/ concealends contains=jsonEscape contained
-else
-   syn region  jsonKeyword matchgroup=jsonQuote start=/"/  end=/"\ze[[:blank:]\r\n]*\:/ contains=jsonEscape contained
-endif
+syn region  jsonKeyword matchgroup=jsonQuote start=/"/  end=/"\ze[[:blank:]\r\n]*\:/ contains=jsonEscape contained
 
 " Syntax: Escape sequences
 syn match   jsonEscape    "\\["\\/bfnrt]" contained
